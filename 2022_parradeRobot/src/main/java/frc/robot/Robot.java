@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,10 +18,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot {
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+  //Motor Controllers
+  WPI_TalonSRX Cont_DriveR = new WPI_TalonSRX(11);
+  WPI_TalonSRX Cont_DriveL = new WPI_TalonSRX(12);
+
+  //Drivetrain
+  DifferentialDrive drive = new DifferentialDrive(Cont_DriveL, Cont_DriveR);
+
+  //Input Devices
+  XboxController xbox = new XboxController(0);
+
+  //Buttons
+  Double btn_DriveFB;
+  Double btn_DriveSpin;
+
   @Override
   public void robotInit() {
   }
@@ -51,6 +63,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+
     
   }
 
@@ -60,7 +73,13 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    btn_DriveFB = xbox.getRawAxis(5);
+    btn_DriveSpin = xbox.getRawAxis(0);
+
+    drive.arcadeDrive(-0.8*btn_DriveFB, 0.8*btn_DriveSpin);
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
