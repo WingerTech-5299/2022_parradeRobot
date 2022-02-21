@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 public class Robot extends TimedRobot {
 
   //Motor Controllers
+  WPI_TalonSRX Cont_DriveL = new WPI_TalonSRX(10);
   WPI_TalonSRX Cont_DriveR = new WPI_TalonSRX(11);
-  WPI_TalonSRX Cont_DriveL = new WPI_TalonSRX(12);
 
   //Drivetrain
   DifferentialDrive drive = new DifferentialDrive(Cont_DriveL, Cont_DriveR);
