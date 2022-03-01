@@ -5,7 +5,11 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -19,8 +23,13 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 public class Robot extends TimedRobot {
 
   //Motor Controllers
-  WPI_TalonSRX Cont_DriveL = new WPI_TalonSRX(10);
-  WPI_TalonSRX Cont_DriveR = new WPI_TalonSRX(11);
+  WPI_VictorSPX Cont_DriveL = new WPI_VictorSPX(10);
+  WPI_VictorSPX Cont_DriveR = new WPI_VictorSPX(11);
+
+  WPI_TalonSRX Cont_Shoulder = new WPI_TalonSRX(12);
+  WPI_TalonSRX Cont_Elbow = new WPI_TalonSRX(13);
+  CANSparkMax Cont_Winch = new CANSparkMax(14, MotorType.kBrushed);
+
 
   //Drivetrain
   DifferentialDrive drive = new DifferentialDrive(Cont_DriveL, Cont_DriveR);
@@ -28,9 +37,15 @@ public class Robot extends TimedRobot {
   //Input Devices
   XboxController xbox = new XboxController(0);
 
+  Joystick joy_R = new Joystick(1);
+  Joystick joy_L = new Joystick(2);
+
   //Buttons
   Double btn_DriveFB;
   Double btn_DriveSpin;
+
+  Double btn_DriveR;
+  Double btn_DriveL;
 
   @Override
   public void robotInit() {
@@ -75,8 +90,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    btn_DriveFB = xbox.getRawAxis(5);
-    btn_DriveSpin = xbox.getRawAxis(0);
+    btn_DriveFB = xbox.getRawAxis(0);
+    btn_DriveSpin = xbox.getRawAxis(5);
+
+    btn_DriveR = joy_R.getRawAxis(1);
+    btn_DriveL = joy_L.getRawAxis(1);
+
+    Cont_DriveR.set(0.8*btn_DriveR);
+    Cont_DriveL.set(0.8*btn_DriveL);
 
     drive.arcadeDrive(-0.8*btn_DriveFB, 0.8*btn_DriveSpin);
   }
